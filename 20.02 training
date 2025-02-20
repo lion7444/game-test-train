@@ -1,0 +1,67 @@
+import random
+
+def get_random_number():
+    """Generate a random number between 1 and 100."""
+    return random.randint(1, 100)
+
+def get_player_guess():
+    """Prompt the player to enter a guess and handle invalid input."""
+    while True:
+        try:
+            return int(input("Введи число: "))
+        except ValueError:
+            print("Пожалуйста, введи целое число.")
+
+def provide_hint(number, guess):
+    """Give the player a hint if they are close to the correct number."""
+    if abs(number - guess) <= 5:
+        print("Ты очень близко!")
+
+def play_game():
+    """Main game loop for guessing the number."""
+    number = get_random_number()
+    attempts = 0
+    print("Я загадала число от 1 до 100. Попробуй угадать!")
+    
+    while True:
+        guess = get_player_guess()
+        attempts += 1
+        provide_hint(number, guess)
+        
+        if guess < number:
+            print("Загаданное число больше.")
+        elif guess > number:
+            print("Загаданное число меньше.")
+        else:
+            print(f"Поздравляю! Ты угадал число {number} за {attempts} попыток.")
+            break
+
+def ask_difficulty():
+    """Allow the player to choose a difficulty level."""
+    while True:
+        difficulty = input("Выбери уровень сложности (легкий/сложный): ").strip().lower()
+        if difficulty in ("легкий", "сложный"):
+            return difficulty
+        print("Некорректный ввод. Попробуй снова.")
+
+def main():
+    """Run the game and ask the player if they want to play again."""
+    while True:
+        difficulty = ask_difficulty()
+        if difficulty == "сложный":
+            print("В сложном режиме у тебя будет ограничение по попыткам (10 попыток).")
+            for _ in range(10):
+                play_game()
+                break
+            else:
+                print("К сожалению, ты исчерпал все попытки. Попробуй снова!")
+        else:
+            play_game()
+        
+        play_again = input("Хочешь сыграть снова? (да/нет): ").strip().lower()
+        if play_again != "да":
+            print("Спасибо за игру! До встречи!")
+            break
+
+if __name__ == "__main__":
+    main()
